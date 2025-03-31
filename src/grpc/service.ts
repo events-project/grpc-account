@@ -8,168 +8,32 @@
 import { type CallContext, type CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 
-export const protobufPackage = "example";
+export const protobufPackage = "account";
 
-export interface CreateExampleRequest {
-  name: string;
-}
-
-export interface ExampleResponse {
-  id: string;
-  name: string;
-}
-
-export interface FindExampleRequest {
+export interface CreateAccountRequest {
   id: string;
 }
 
-function createBaseCreateExampleRequest(): CreateExampleRequest {
-  return { name: "" };
+export interface CreateAccountResponse {
+  id: string;
 }
 
-export const CreateExampleRequest = {
-  encode(message: CreateExampleRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.name !== "") {
-      writer.uint32(10).string(message.name);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): CreateExampleRequest {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCreateExampleRequest();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.name = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CreateExampleRequest {
-    return { name: isSet(object.name) ? globalThis.String(object.name) : "" };
-  },
-
-  toJSON(message: CreateExampleRequest): unknown {
-    const obj: any = {};
-    if (message.name !== "") {
-      obj.name = message.name;
-    }
-    return obj;
-  },
-
-  create(base?: DeepPartial<CreateExampleRequest>): CreateExampleRequest {
-    return CreateExampleRequest.fromPartial(base ?? {});
-  },
-  fromPartial(object: DeepPartial<CreateExampleRequest>): CreateExampleRequest {
-    const message = createBaseCreateExampleRequest();
-    message.name = object.name ?? "";
-    return message;
-  },
-};
-
-function createBaseExampleResponse(): ExampleResponse {
-  return { id: "", name: "" };
-}
-
-export const ExampleResponse = {
-  encode(message: ExampleResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
-      writer.uint32(10).string(message.id);
-    }
-    if (message.name !== "") {
-      writer.uint32(18).string(message.name);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): ExampleResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseExampleResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.id = reader.string();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.name = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): ExampleResponse {
-    return {
-      id: isSet(object.id) ? globalThis.String(object.id) : "",
-      name: isSet(object.name) ? globalThis.String(object.name) : "",
-    };
-  },
-
-  toJSON(message: ExampleResponse): unknown {
-    const obj: any = {};
-    if (message.id !== "") {
-      obj.id = message.id;
-    }
-    if (message.name !== "") {
-      obj.name = message.name;
-    }
-    return obj;
-  },
-
-  create(base?: DeepPartial<ExampleResponse>): ExampleResponse {
-    return ExampleResponse.fromPartial(base ?? {});
-  },
-  fromPartial(object: DeepPartial<ExampleResponse>): ExampleResponse {
-    const message = createBaseExampleResponse();
-    message.id = object.id ?? "";
-    message.name = object.name ?? "";
-    return message;
-  },
-};
-
-function createBaseFindExampleRequest(): FindExampleRequest {
+function createBaseCreateAccountRequest(): CreateAccountRequest {
   return { id: "" };
 }
 
-export const FindExampleRequest = {
-  encode(message: FindExampleRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const CreateAccountRequest = {
+  encode(message: CreateAccountRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): FindExampleRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): CreateAccountRequest {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseFindExampleRequest();
+    const message = createBaseCreateAccountRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -189,11 +53,11 @@ export const FindExampleRequest = {
     return message;
   },
 
-  fromJSON(object: any): FindExampleRequest {
+  fromJSON(object: any): CreateAccountRequest {
     return { id: isSet(object.id) ? globalThis.String(object.id) : "" };
   },
 
-  toJSON(message: FindExampleRequest): unknown {
+  toJSON(message: CreateAccountRequest): unknown {
     const obj: any = {};
     if (message.id !== "") {
       obj.id = message.id;
@@ -201,60 +65,101 @@ export const FindExampleRequest = {
     return obj;
   },
 
-  create(base?: DeepPartial<FindExampleRequest>): FindExampleRequest {
-    return FindExampleRequest.fromPartial(base ?? {});
+  create(base?: DeepPartial<CreateAccountRequest>): CreateAccountRequest {
+    return CreateAccountRequest.fromPartial(base ?? {});
   },
-  fromPartial(object: DeepPartial<FindExampleRequest>): FindExampleRequest {
-    const message = createBaseFindExampleRequest();
+  fromPartial(object: DeepPartial<CreateAccountRequest>): CreateAccountRequest {
+    const message = createBaseCreateAccountRequest();
     message.id = object.id ?? "";
     return message;
   },
 };
 
-export type ExampleServiceDefinition = typeof ExampleServiceDefinition;
-export const ExampleServiceDefinition = {
-  name: "ExampleService",
-  fullName: "example.ExampleService",
+function createBaseCreateAccountResponse(): CreateAccountResponse {
+  return { id: "" };
+}
+
+export const CreateAccountResponse = {
+  encode(message: CreateAccountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CreateAccountResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCreateAccountResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CreateAccountResponse {
+    return { id: isSet(object.id) ? globalThis.String(object.id) : "" };
+  },
+
+  toJSON(message: CreateAccountResponse): unknown {
+    const obj: any = {};
+    if (message.id !== "") {
+      obj.id = message.id;
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<CreateAccountResponse>): CreateAccountResponse {
+    return CreateAccountResponse.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<CreateAccountResponse>): CreateAccountResponse {
+    const message = createBaseCreateAccountResponse();
+    message.id = object.id ?? "";
+    return message;
+  },
+};
+
+export type AccountServiceDefinition = typeof AccountServiceDefinition;
+export const AccountServiceDefinition = {
+  name: "AccountService",
+  fullName: "account.AccountService",
   methods: {
-    findExample: {
-      name: "FindExample",
-      requestType: FindExampleRequest,
+    createAccount: {
+      name: "CreateAccount",
+      requestType: CreateAccountRequest,
       requestStream: false,
-      responseType: ExampleResponse,
-      responseStream: false,
-      options: {},
-    },
-    createExample: {
-      name: "CreateExample",
-      requestType: CreateExampleRequest,
-      requestStream: false,
-      responseType: ExampleResponse,
+      responseType: CreateAccountResponse,
       responseStream: false,
       options: {},
     },
   },
 } as const;
 
-export interface ExampleServiceImplementation<CallContextExt = {}> {
-  findExample(
-    request: FindExampleRequest,
+export interface AccountServiceImplementation<CallContextExt = {}> {
+  createAccount(
+    request: CreateAccountRequest,
     context: CallContext & CallContextExt,
-  ): Promise<DeepPartial<ExampleResponse>>;
-  createExample(
-    request: CreateExampleRequest,
-    context: CallContext & CallContextExt,
-  ): Promise<DeepPartial<ExampleResponse>>;
+  ): Promise<DeepPartial<CreateAccountResponse>>;
 }
 
-export interface ExampleServiceClient<CallOptionsExt = {}> {
-  findExample(
-    request: DeepPartial<FindExampleRequest>,
+export interface AccountServiceClient<CallOptionsExt = {}> {
+  createAccount(
+    request: DeepPartial<CreateAccountRequest>,
     options?: CallOptions & CallOptionsExt,
-  ): Promise<ExampleResponse>;
-  createExample(
-    request: DeepPartial<CreateExampleRequest>,
-    options?: CallOptions & CallOptionsExt,
-  ): Promise<ExampleResponse>;
+  ): Promise<CreateAccountResponse>;
 }
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;

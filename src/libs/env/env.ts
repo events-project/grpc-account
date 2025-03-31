@@ -6,6 +6,7 @@ const envSchema = z.object({
   HOST: z.string(),
   PORT: z.coerce.number(),
   DATABASE_URL: z.string(),
+  SECRET_ENCRYPT_KEY: z.string(),
 });
 type Env = z.infer<typeof envSchema>;
 const envValues = envSchema.parse(process.env);

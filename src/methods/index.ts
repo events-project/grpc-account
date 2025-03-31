@@ -1,2 +1,1 @@
-export * from './create-example';
-export * from './find-example';
+export * from './create-account';

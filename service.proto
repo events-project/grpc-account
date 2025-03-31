@@ -1,17 +1,11 @@
 syntax = "proto3";
 
-package example;
+package account;
 
-service ExampleService {
-  rpc FindExample(FindExampleRequest) returns (ExampleResponse) {}
-  rpc CreateExample(CreateExampleRequest) returns (ExampleResponse) {}
+service AccountService {
+  rpc CreateAccount(CreateAccountRequest) returns (CreateAccountResponse);
 }
 
-message CreateExampleRequest { string name = 1; }
+message CreateAccountRequest { string id = 1; }
 
-message ExampleResponse {
-  string id = 1;
-  string name = 2;
-}
-
-message FindExampleRequest { string id = 1; }
+message CreateAccountResponse { string id = 1; }

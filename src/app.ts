@@ -1,6 +1,6 @@
 import { createServer } from 'nice-grpc';
 
-import { ExampleServiceDefinition } from '@grpc/service';
+import { AccountServiceDefinition } from '@grpc/service';
 import { db } from '@libs/database';
 import * as methods from './methods';
 import { env } from '@libs/env';
@@ -11,7 +11,7 @@ const address = `${env('HOST')}:${env('PORT')}`;
 async function startServer(): Promise<void> {
   try {
     const server = createServer().use(errorHandlingMiddleware);
-    server.add(ExampleServiceDefinition, methods);
+    server.add(AccountServiceDefinition, methods);
 
     // Connect to database
     await db.$connect();
