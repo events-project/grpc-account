@@ -1,11 +1,7 @@
-import { CreateAccountRequest, CreateAccountResponse } from '@grpc/service';
+import { CreateAccountRequest, Account } from '@grpc/service';
 import { createNewAccount } from '@libs/database/account';
 
-export const createAccount = async (
-  request: CreateAccountRequest
-): Promise<CreateAccountResponse> => {
+export const createAccount = async (request: CreateAccountRequest): Promise<Account> => {
   const result = await createNewAccount(request);
-  return {
-    id: result.id,
-  };
+  return result;
 };

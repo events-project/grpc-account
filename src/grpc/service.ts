@@ -7,6 +7,7 @@
 /* eslint-disable */
 import { type CallContext, type CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
+import Long = require("long");
 
 export const protobufPackage = "account";
 
@@ -14,8 +15,13 @@ export interface CreateAccountRequest {
   id: string;
 }
 
-export interface CreateAccountResponse {
+export interface Account {
   id: string;
+  credits: number;
+}
+
+export interface ValidateApiKeyRequest {
+  key: string;
 }
 
 function createBaseCreateAccountRequest(): CreateAccountRequest {
@@ -75,22 +81,25 @@ export const CreateAccountRequest = {
   },
 };
 
-function createBaseCreateAccountResponse(): CreateAccountResponse {
-  return { id: "" };
+function createBaseAccount(): Account {
+  return { id: "", credits: 0 };
 }
 
-export const CreateAccountResponse = {
-  encode(message: CreateAccountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const Account = {
+  encode(message: Account, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
+    }
+    if (message.credits !== 0) {
+      writer.uint32(16).int64(message.credits);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): CreateAccountResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): Account {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCreateAccountResponse();
+    const message = createBaseAccount();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -101,6 +110,13 @@ export const CreateAccountResponse = {
 
           message.id = reader.string();
           continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.credits = longToNumber(reader.int64() as Long);
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -110,24 +126,88 @@ export const CreateAccountResponse = {
     return message;
   },
 
-  fromJSON(object: any): CreateAccountResponse {
-    return { id: isSet(object.id) ? globalThis.String(object.id) : "" };
+  fromJSON(object: any): Account {
+    return {
+      id: isSet(object.id) ? globalThis.String(object.id) : "",
+      credits: isSet(object.credits) ? globalThis.Number(object.credits) : 0,
+    };
   },
 
-  toJSON(message: CreateAccountResponse): unknown {
+  toJSON(message: Account): unknown {
     const obj: any = {};
     if (message.id !== "") {
       obj.id = message.id;
     }
+    if (message.credits !== 0) {
+      obj.credits = Math.round(message.credits);
+    }
     return obj;
   },
 
-  create(base?: DeepPartial<CreateAccountResponse>): CreateAccountResponse {
-    return CreateAccountResponse.fromPartial(base ?? {});
+  create(base?: DeepPartial<Account>): Account {
+    return Account.fromPartial(base ?? {});
   },
-  fromPartial(object: DeepPartial<CreateAccountResponse>): CreateAccountResponse {
-    const message = createBaseCreateAccountResponse();
+  fromPartial(object: DeepPartial<Account>): Account {
+    const message = createBaseAccount();
     message.id = object.id ?? "";
+    message.credits = object.credits ?? 0;
+    return message;
+  },
+};
+
+function createBaseValidateApiKeyRequest(): ValidateApiKeyRequest {
+  return { key: "" };
+}
+
+export const ValidateApiKeyRequest = {
+  encode(message: ValidateApiKeyRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ValidateApiKeyRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseValidateApiKeyRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ValidateApiKeyRequest {
+    return { key: isSet(object.key) ? globalThis.String(object.key) : "" };
+  },
+
+  toJSON(message: ValidateApiKeyRequest): unknown {
+    const obj: any = {};
+    if (message.key !== "") {
+      obj.key = message.key;
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<ValidateApiKeyRequest>): ValidateApiKeyRequest {
+    return ValidateApiKeyRequest.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<ValidateApiKeyRequest>): ValidateApiKeyRequest {
+    const message = createBaseValidateApiKeyRequest();
+    message.key = object.key ?? "";
     return message;
   },
 };
@@ -141,7 +221,15 @@ export const AccountServiceDefinition = {
       name: "CreateAccount",
       requestType: CreateAccountRequest,
       requestStream: false,
-      responseType: CreateAccountResponse,
+      responseType: Account,
+      responseStream: false,
+      options: {},
+    },
+    validateApiKey: {
+      name: "ValidateApiKey",
+      requestType: ValidateApiKeyRequest,
+      requestStream: false,
+      responseType: Account,
       responseStream: false,
       options: {},
     },
@@ -149,17 +237,13 @@ export const AccountServiceDefinition = {
 } as const;
 
 export interface AccountServiceImplementation<CallContextExt = {}> {
-  createAccount(
-    request: CreateAccountRequest,
-    context: CallContext & CallContextExt,
-  ): Promise<DeepPartial<CreateAccountResponse>>;
+  createAccount(request: CreateAccountRequest, context: CallContext & CallContextExt): Promise<DeepPartial<Account>>;
+  validateApiKey(request: ValidateApiKeyRequest, context: CallContext & CallContextExt): Promise<DeepPartial<Account>>;
 }
 
 export interface AccountServiceClient<CallOptionsExt = {}> {
-  createAccount(
-    request: DeepPartial<CreateAccountRequest>,
-    options?: CallOptions & CallOptionsExt,
-  ): Promise<CreateAccountResponse>;
+  createAccount(request: DeepPartial<CreateAccountRequest>, options?: CallOptions & CallOptionsExt): Promise<Account>;
+  validateApiKey(request: DeepPartial<ValidateApiKeyRequest>, options?: CallOptions & CallOptionsExt): Promise<Account>;
 }
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
@@ -169,6 +253,21 @@ export type DeepPartial<T> = T extends Builtin ? T
   : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+function longToNumber(long: Long): number {
+  if (long.gt(globalThis.Number.MAX_SAFE_INTEGER)) {
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  if (long.lt(globalThis.Number.MIN_SAFE_INTEGER)) {
+    throw new globalThis.Error("Value is smaller than Number.MIN_SAFE_INTEGER");
+  }
+  return long.toNumber();
+}
+
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
