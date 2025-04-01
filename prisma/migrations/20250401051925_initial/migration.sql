@@ -4,7 +4,7 @@ CREATE TYPE "SecretType" AS ENUM ('SECRET_KEY', 'PUBLISHABLE_KEY');
 -- CreateTable
 CREATE TABLE "Account" (
     "id" TEXT NOT NULL,
-    "credits" INTEGER NOT NULL DEFAULT 0,
+    "credits" BIGINT NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

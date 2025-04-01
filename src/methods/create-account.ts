@@ -3,5 +3,8 @@ import { createNewAccount } from '@libs/database/account';
 
 export const createAccount = async (request: CreateAccountRequest): Promise<Account> => {
   const result = await createNewAccount(request);
-  return result;
+  return {
+    id: result.id,
+    credits: result.credits.toString(),
+  };
 };

@@ -5,5 +5,8 @@ import { findAccountByKey } from '@libs/database/account';
 export const validateApiKey = async (request: ValidateApiKeyRequest): Promise<Account> => {
   const result = await findAccountByKey(request.key);
   if (!result) throw new NotFoundError('ACCOUNT_NOT_FOUND');
-  return result;
+  return {
+    id: result.id,
+    credits: result.credits.toString(),
+  };
 };

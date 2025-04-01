@@ -15,7 +15,7 @@ datasource db {
 
 model Account {
   id        String   @id
-  credits   Int      @default(0)
+  credits   BigInt   @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

@@ -4,7 +4,7 @@ import { AccountServiceDefinition } from '@grpc/service';
 import { db } from '@libs/database';
 import * as methods from './methods';
 import { env } from '@libs/env';
-import { errorHandlingMiddleware } from '@events-project/common';
+import { errorHandlingMiddleware, logger } from '@events-project/common';
 
 const address = `${env('HOST')}:${env('PORT')}`;
 
@@ -25,16 +25,16 @@ async function startServer(): Promise<void> {
       });
     });
   } catch (error) {
-    console.error('Failed to start server:', error as Error);
+    logger.error('Failed to start server:', error as Error);
     process.exit(1);
   }
 }
 
 startServer()
   .then(() => {
-    console.log(`Server started on ${address}`);
+    logger.debug(`Server started on ${address}`);
   })
   .catch((error) => {
-    console.error('Unhandled error:', error as Error);
+    logger.error('Unhandled error:', error as Error);
     process.exit(1);
   });

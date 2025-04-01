@@ -17,7 +17,7 @@ export interface CreateAccountRequest {
 
 export interface Account {
   id: string;
-  credits: number;
+  credits: string;
 }
 
 export interface ValidateApiKeyRequest {
@@ -82,7 +82,7 @@ export const CreateAccountRequest = {
 };
 
 function createBaseAccount(): Account {
-  return { id: "", credits: 0 };
+  return { id: "", credits: "0" };
 }
 
 export const Account = {
@@ -90,7 +90,7 @@ export const Account = {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.credits !== 0) {
+    if (message.credits !== "0") {
       writer.uint32(16).int64(message.credits);
     }
     return writer;
@@ -115,7 +115,7 @@ export const Account = {
             break;
           }
 
-          message.credits = longToNumber(reader.int64() as Long);
+          message.credits = longToString(reader.int64() as Long);
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -129,7 +129,7 @@ export const Account = {
   fromJSON(object: any): Account {
     return {
       id: isSet(object.id) ? globalThis.String(object.id) : "",
-      credits: isSet(object.credits) ? globalThis.Number(object.credits) : 0,
+      credits: isSet(object.credits) ? globalThis.String(object.credits) : "0",
     };
   },
 
@@ -138,8 +138,8 @@ export const Account = {
     if (message.id !== "") {
       obj.id = message.id;
     }
-    if (message.credits !== 0) {
-      obj.credits = Math.round(message.credits);
+    if (message.credits !== "0") {
+      obj.credits = message.credits;
     }
     return obj;
   },
@@ -150,7 +150,7 @@ export const Account = {
   fromPartial(object: DeepPartial<Account>): Account {
     const message = createBaseAccount();
     message.id = object.id ?? "";
-    message.credits = object.credits ?? 0;
+    message.credits = object.credits ?? "0";
     return message;
   },
 };
@@ -254,14 +254,8 @@ export type DeepPartial<T> = T extends Builtin ? T
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
-function longToNumber(long: Long): number {
-  if (long.gt(globalThis.Number.MAX_SAFE_INTEGER)) {
-    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
-  }
-  if (long.lt(globalThis.Number.MIN_SAFE_INTEGER)) {
-    throw new globalThis.Error("Value is smaller than Number.MIN_SAFE_INTEGER");
-  }
-  return long.toNumber();
+function longToString(long: Long) {
+  return long.toString();
 }
 
 if (_m0.util.Long !== Long) {
