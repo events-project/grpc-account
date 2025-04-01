@@ -16,3 +16,6 @@ coverage/
 # Configuration files
 *.config.js
 .eslintrc.js
+
+# Scripts
+scripts/

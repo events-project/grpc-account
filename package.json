@@ -4,7 +4,7 @@
   "description": "TypeScript gRPC service using nice-grpc",
   "main": "dist/app.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && tsc-alias",
     "start": "node dist/app.js",
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node -r tsconfig-paths/register' src/app.ts | pino-pretty",
     "prisma:generate": "npx prisma generate",
@@ -12,10 +12,13 @@
     "proto:generate": "protoc --plugin=protoc-gen-ts_proto=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./src/grpc --ts_proto_opt=outputServices=nice-grpc,outputServices=generic-definitions,useExactTypes=false,forceLong=string --proto_path=. service.proto",
     "lint": "eslint 'src/**/*.ts'",
     "lint:fix": "eslint 'src/**/*.ts' --fix",
-    "format": "prettier --write 'src/**/*.{ts,js,json}'"
+    "format": "prettier --write 'src/**/*.{ts,js,json}'",
+    "client:generate": "node scripts/generate-client.js",
+    "client:publish": "bash scripts/publish-client.sh"
   },
   "dependencies": {
     "@events-project/common": "^1.0.9",
+    "@events-project/grpc-account": "^1.0.3",
     "@prisma/client": "^6.5.0",
     "dotenv": "^16.4.7",
     "encrypt-tools": "^1.0.4",
@@ -39,6 +42,7 @@
     "prisma": "^6.5.0",
     "ts-node": "^10.9.1",
     "ts-proto": "^1.156.0",
+    "tsc-alias": "^1.8.13",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.2.2"
   }
