@@ -25,6 +25,7 @@ async function startServer(): Promise<void> {
       });
     });
   } catch (error) {
+    console.error('❌ Failed to start server:', error);
     logger.error('Failed to start server:', error as Error);
     process.exit(1);
   }
