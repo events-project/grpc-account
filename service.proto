@@ -5,6 +5,7 @@ package account;
 service AccountService {
   rpc CreateAccount(CreateAccountRequest) returns (Account);
   rpc ValidateApiKey(ValidateApiKeyRequest) returns (Account);
+  rpc RevealApiKey(RevealApiKeyRequest) returns (RevealApiKeyResponse);
 }
 
 message CreateAccountRequest { string id = 1; }
@@ -15,3 +16,12 @@ message Account {
 }
 
 message ValidateApiKeyRequest { string key = 1; }
+
+message RevealApiKeyRequest {
+  string accountId = 1;
+  string secretId = 2;
+}
+
+message RevealApiKeyResponse {
+  string apiKey = 1;
+}
