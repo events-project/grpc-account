@@ -1,0 +1,33 @@
+import { Kafka } from 'kafkajs';
+import { env } from '@libs/env';
+import { handleEvent } from '@libs/kafka/event-handler';
+import { logger } from '@events-project/common';
+
+export const startKafkaConsumer = async () => {
+  const serviceName = env('SERVICE_NAME');
+  const topic = env('KAFKA_TOPIC');
+
+  const kafka = new Kafka({
+    clientId: env('KAFKA_CLIENT_ID'),
+    brokers: env('KAFKA_URL').split(','),
+  });
+
+  const consumer = kafka.consumer({ groupId: env('KAFKA_GROUP_ID') });
+
+  await consumer.connect();
+
+  await consumer.subscribe({ topic: env('KAFKA_TOPIC'), fromBeginning: true });
+
+  await consumer.run({
+    eachMessage: async ({ message }) => {
+      try {
+        const parsed = JSON.parse(message.value?.toString() || '{}');
+        await handleEvent(parsed);
+      } catch (error) {
+        logger.error('Kafka message error:', error);
+      }
+    },
+  });
+
+  logger.debug(`Kafka consumer started for ${serviceName}, topic: ${topic}`);
+};

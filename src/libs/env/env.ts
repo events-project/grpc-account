@@ -7,6 +7,11 @@ const envSchema = z.object({
   PORT: z.coerce.number(),
   DATABASE_URL: z.string(),
   SECRET_ENCRYPT_KEY: z.string(),
+  KAFKA_URL: z.string(),
+  KAFKA_CLIENT_ID: z.string(),
+  KAFKA_TOPIC: z.string(),
+  KAFKA_GROUP_ID: z.string(),
+  SERVICE_NAME: z.string(),
 });
 type Env = z.infer<typeof envSchema>;
 const envValues = envSchema.parse(process.env);

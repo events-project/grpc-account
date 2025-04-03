@@ -1,4 +1,5 @@
 import { createServer } from 'nice-grpc';
+import { startKafkaConsumer } from '@libs/kafka';
 
 import { AccountServiceDefinition } from '@grpc/service';
 import { db } from '@libs/database';
@@ -13,8 +14,8 @@ async function startServer(): Promise<void> {
     const server = createServer().use(errorHandlingMiddleware);
     server.add(AccountServiceDefinition, methods);
 
-    // Connect to database
     await db.$connect();
+    await startKafkaConsumer();
     await server.listen(address);
 
     const signals = ['SIGINT', 'SIGTERM'];
@@ -25,7 +26,7 @@ async function startServer(): Promise<void> {
       });
     });
   } catch (error) {
-    logger.error('Failed to start server:', error as Error);
+    logger.error('Failed to start server:', error);
     process.exit(1);
   }
 }
