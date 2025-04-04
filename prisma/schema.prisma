@@ -41,11 +41,23 @@ model CreditUsage {
   appId     String
   type      String
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  credits   BigInt   @default(0)
-
-  @@unique([appId, type], name: "appId_type")
 }
+
+
+model MonthlyCreditUsage {
+  id        String   @id @default(uuid())
+  appId     String
+  month     String
+  credits   BigInt   @default(0)
+  isPaid    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([appId, month], name: "appId_month")
+}
+
+
+
 enum SecretType {
   SECRET_KEY
   PUBLISHABLE_KEY

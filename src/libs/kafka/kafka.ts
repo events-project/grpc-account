@@ -12,7 +12,7 @@ export const startKafkaConsumer = async () => {
     brokers: env('KAFKA_URL').split(','),
   });
 
-  const consumer = kafka.consumer({ groupId: env('KAFKA_GROUP_ID') });
+  const consumer = kafka.consumer({ groupId: env('KAFKA_GROUP_ID'), sessionTimeout: 30000 });
 
   await consumer.connect();
 

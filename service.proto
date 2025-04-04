@@ -6,6 +6,8 @@ service AccountService {
   rpc CreateAccount(CreateAccountRequest) returns (Account);
   rpc ValidateApiKey(ValidateApiKeyRequest) returns (Account);
   rpc RevealApiKey(RevealApiKeyRequest) returns (RevealApiKeyResponse);
+  rpc monthlyBilling(SummarizeMonthlyUsageRequest) returns (SummarizeMonthlyUsageResponse);
+
 }
 
 message CreateAccountRequest { string id = 1; }
@@ -24,4 +26,15 @@ message RevealApiKeyRequest {
 
 message RevealApiKeyResponse {
   string apiKey = 1;
+}
+
+message SummarizeMonthlyUsageRequest {
+  string appId = 1;
+  string month = 2; // Format: "YYYY-MM"
+}
+
+message SummarizeMonthlyUsageResponse {
+  string appId = 1;
+  string month = 2;
+  int64 credits = 3;
 }

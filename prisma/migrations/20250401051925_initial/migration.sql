@@ -28,17 +28,26 @@ CREATE TABLE "Secret"
     CONSTRAINT "Secret_pkey" PRIMARY KEY ("id")
 );
 
+-- CreditUsage table
 CREATE TABLE "CreditUsage"
 (
-    "id"        TEXT         NOT NULL,
+    "id"        TEXT PRIMARY KEY      DEFAULT gen_random_uuid(),
     "appId"     TEXT         NOT NULL,
     "type"      TEXT         NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- MonthlyCreditUsage table
+CREATE TABLE "MonthlyCreditUsage"
+(
+    "id"        TEXT PRIMARY KEY      DEFAULT gen_random_uuid(),
+    "appId"     TEXT         NOT NULL,
+    "month"     TEXT         NOT NULL,
+    "credits"   BIGINT       NOT NULL DEFAULT 0,
+    "isPaid"    BOOLEAN      NOT NULL DEFAULT FALSE,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "credits"   BIGINT       NOT NULL DEFAULT 0,
-
-    CONSTRAINT "CreditUsage_pkey" PRIMARY KEY ("id"),
-    CONSTRAINT "CreditUsage_appId_type_unique" UNIQUE ("appId", "type")
+    CONSTRAINT "appId_month" UNIQUE ("appId", "month")
 );
 
 
