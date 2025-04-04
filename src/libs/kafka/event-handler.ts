@@ -5,7 +5,7 @@ import { saveCreditUsage } from '@libs/database/account/save-credit-usage';
 
 const usageTypeSchema = z.nativeEnum(UsageType);
 const eventSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string().min(1),
   appId: z.string().min(1),
   type: usageTypeSchema,
 });
