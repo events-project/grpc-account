@@ -37,28 +37,40 @@ model Secret {
 }
 
 model CreditUsage {
-  id        String   @id @default(uuid())
+  id        String    @id
   appId     String
-  type      String
-  createdAt DateTime @default(now())
+  type      UsageType
+  credits   BigInt    @default(0)
+  createdAt DateTime  @default(now())
 }
 
+model PeriodCreditUsage {
+  id            String        @id @default(uuid())
+  appId         String
+  start         DateTime
+  end           DateTime
+  credits       BigInt        @default(0)
+  paymentStatus PaymentStatus @default(PENDING)
+  paymentId     String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
-model MonthlyCreditUsage {
-  id        String   @id @default(uuid())
-  appId     String
-  month     String
-  credits   BigInt   @default(0)
-  isPaid    Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([appId, month], name: "appId_month")
+  @@unique([appId, start, end])
 }
-
-
 
 enum SecretType {
   SECRET_KEY
   PUBLISHABLE_KEY
+}
+
+enum UsageType {
+  EVENT
+  WEBHOOK
+  API_CALL
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
 }
