@@ -11,7 +11,7 @@ const periodBillingSchema = z.object({
   end: z.string().datetime({ message: 'End must be a valid ISO timestamp' }),
 });
 
-export const summarizeBillingForPeriod = async (
+export const monthlyBilling = async (
   request: SummarizePeriodUsageRequest
 ): Promise<SummarizePeriodUsageResponse> => {
   const { appId, start, end } = periodBillingSchema.parse(request);
