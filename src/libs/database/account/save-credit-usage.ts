@@ -7,13 +7,6 @@ export const saveCreditUsage = async (
   type: UsageType,
   credits: bigint
 ) => {
-  const account = await db.account.findUnique({
-    where: { id: appId },
-  });
-
-  if (!account) {
-    throw new Error(`Account with ID ${appId} does not exist`);
-  }
 
   return db.creditUsage.create({
     data: {
