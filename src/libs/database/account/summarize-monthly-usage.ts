@@ -1,57 +1,50 @@
 import { db } from '@libs/database/db';
-import { getCreditEventMap } from '@libs/env';
 
-export const summarizeMonthlyUsage = async (appId: string, month: string) => {
-  const startDate = new Date(`${month}-01T00:00:00.000Z`);
-  const endDate = new Date(startDate);
-  endDate.setMonth(endDate.getMonth() + 1);
-
-  const events = await db.creditUsage.findMany({
+export const summarizePeriodUsage = async (
+  appId: string,
+  start: Date,
+  end: Date
+) => {
+  const total = await db.creditUsage.aggregate({
     where: {
       appId,
       createdAt: {
-        gte: startDate,
-        lt: endDate,
+        gte: start,
+        lt: end,
       },
     },
-    select: {
-      type: true,
+    _sum: {
+      credits: true,
     },
   });
 
-  const counts: Record<string, number> = {};
-  for (const event of events) {
-    counts[event.type] = (counts[event.type] || 0) + 1;
-  }
+  const credits = total._sum.credits ?? BigInt(0);
 
-  const creditMap = getCreditEventMap();
-
-  const totalCredits = Object.entries(counts).reduce((sum, [type, count]) => {
-    const multiplier = creditMap[type] || 0;
-    return sum + count * multiplier;
-  }, 0);
-
-  // Save or update in MonthlyCreditUsage table
-  await db.monthlyCreditUsage.upsert({
+  const result = await db.periodCreditUsage.upsert({
     where: {
-      appId_month: {
+      appId_start_end: {
         appId,
-        month,
+        start,
+        end,
       },
     },
     update: {
-      credits: BigInt(totalCredits),
+      credits,
+      updatedAt: new Date(),
     },
     create: {
       appId,
-      month,
-      credits: BigInt(totalCredits),
+      start,
+      end,
+      credits,
     },
   });
 
   return {
     appId,
-    month,
-    credits: totalCredits.toString(),
+    start: result.start.toISOString(),
+    end: result.end.toISOString(),
+    credits: result.credits.toString(),
+    paymentStatus: result.paymentStatus,
   };
 };

@@ -1,16 +1,27 @@
-import { SummarizeMonthlyUsageRequest, SummarizeMonthlyUsageResponse } from '@grpc/service';
-import { summarizeMonthlyUsage } from '@libs/database/account';
+import {
+  SummarizePeriodUsageRequest,
+  SummarizePeriodUsageResponse,
+} from '@grpc/service';
+import { summarizePeriodUsage } from '@libs/database/account';
+import { z } from 'zod';
 
-export const monthlyBilling = async (
-  request: SummarizeMonthlyUsageRequest
-): Promise<SummarizeMonthlyUsageResponse> => {
-  const { appId, month } = request;
-  if (!appId) {
-    throw new Error('App ID is required');
-  }
-  if (!month) {
-    throw new Error('Month is required');
-  }
-  const { credits } = await summarizeMonthlyUsage(appId, month);
-  return { appId, month, credits };
+const periodBillingSchema = z.object({
+  appId: z.string().min(1, 'App ID is required'),
+  start: z.string().datetime({ message: 'Start must be a valid ISO timestamp' }),
+  end: z.string().datetime({ message: 'End must be a valid ISO timestamp' }),
+});
+
+export const summarizeBillingForPeriod = async (
+  request: SummarizePeriodUsageRequest
+): Promise<SummarizePeriodUsageResponse> => {
+  const { appId, start, end } = periodBillingSchema.parse(request);
+
+  const { credits } = await summarizePeriodUsage(appId, new Date(start), new Date(end));
+
+  return {
+    appId,
+    start,
+    end,
+    credits,
+  };
 };
