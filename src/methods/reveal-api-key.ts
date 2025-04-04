@@ -1,15 +1,18 @@
 import { RevealApiKeyRequest, RevealApiKeyResponse } from '@grpc/service';
 import { revealSecretByIds } from '@libs/database/account';
+import { z } from 'zod';
+
+// Define the schema using zod
+const RevealApiKeySchema = z.object({
+  accountId: z.string().min(1, 'Account ID is required'),
+  secretId: z.string().min(1, 'Secret ID is required'),
+});
 
 export const revealApiKey = async (request: RevealApiKeyRequest): Promise<RevealApiKeyResponse> => {
-  const { accountId, secretId } = request;
-  if (!accountId) {
-    throw new Error('Account ID is required');
-  }
-  if (!secretId) {
-    throw new Error('Secret ID is required');
-  }
+  const { accountId, secretId } = RevealApiKeySchema.parse(request);
 
   const { apiKey } = await revealSecretByIds(accountId, secretId);
   return { apiKey };
 };
+
+
