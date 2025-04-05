@@ -34,9 +34,10 @@ message SummarizePeriodUsageRequest {
 }
 
 message SummarizePeriodUsageResponse {
-  string appId = 1;
-  string start = 2;
-  string end = 3;
-  string credits = 4;
+  string id = 1;
+  string appId = 2;
+  string start = 3;
+  string end = 4;
+  string credits = 5;
 }
 

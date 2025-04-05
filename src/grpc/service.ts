@@ -40,6 +40,7 @@ export interface SummarizePeriodUsageRequest {
 }
 
 export interface SummarizePeriodUsageResponse {
+  id: string;
   appId: string;
   start: string;
   end: string;
@@ -440,22 +441,25 @@ export const SummarizePeriodUsageRequest = {
 };
 
 function createBaseSummarizePeriodUsageResponse(): SummarizePeriodUsageResponse {
-  return { appId: "", start: "", end: "", credits: "" };
+  return { id: "", appId: "", start: "", end: "", credits: "" };
 }
 
 export const SummarizePeriodUsageResponse = {
   encode(message: SummarizePeriodUsageResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
     if (message.appId !== "") {
-      writer.uint32(10).string(message.appId);
+      writer.uint32(18).string(message.appId);
     }
     if (message.start !== "") {
-      writer.uint32(18).string(message.start);
+      writer.uint32(26).string(message.start);
     }
     if (message.end !== "") {
-      writer.uint32(26).string(message.end);
+      writer.uint32(34).string(message.end);
     }
     if (message.credits !== "") {
-      writer.uint32(34).string(message.credits);
+      writer.uint32(42).string(message.credits);
     }
     return writer;
   },
@@ -472,24 +476,31 @@ export const SummarizePeriodUsageResponse = {
             break;
           }
 
-          message.appId = reader.string();
+          message.id = reader.string();
           continue;
         case 2:
           if (tag !== 18) {
             break;
           }
 
-          message.start = reader.string();
+          message.appId = reader.string();
           continue;
         case 3:
           if (tag !== 26) {
             break;
           }
 
-          message.end = reader.string();
+          message.start = reader.string();
           continue;
         case 4:
           if (tag !== 34) {
+            break;
+          }
+
+          message.end = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
             break;
           }
 
@@ -506,6 +517,7 @@ export const SummarizePeriodUsageResponse = {
 
   fromJSON(object: any): SummarizePeriodUsageResponse {
     return {
+      id: isSet(object.id) ? globalThis.String(object.id) : "",
       appId: isSet(object.appId) ? globalThis.String(object.appId) : "",
       start: isSet(object.start) ? globalThis.String(object.start) : "",
       end: isSet(object.end) ? globalThis.String(object.end) : "",
@@ -515,6 +527,9 @@ export const SummarizePeriodUsageResponse = {
 
   toJSON(message: SummarizePeriodUsageResponse): unknown {
     const obj: any = {};
+    if (message.id !== "") {
+      obj.id = message.id;
+    }
     if (message.appId !== "") {
       obj.appId = message.appId;
     }
@@ -535,6 +550,7 @@ export const SummarizePeriodUsageResponse = {
   },
   fromPartial(object: DeepPartial<SummarizePeriodUsageResponse>): SummarizePeriodUsageResponse {
     const message = createBaseSummarizePeriodUsageResponse();
+    message.id = object.id ?? "";
     message.appId = object.appId ?? "";
     message.start = object.start ?? "";
     message.end = object.end ?? "";

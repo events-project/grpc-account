@@ -6,12 +6,13 @@ export const monthlyBilling = async (
   request: SummarizePeriodUsageRequest
 ): Promise<SummarizePeriodUsageResponse> => {
   const { appId, target } = PeriodBillingSchema.parse(request);
-  const { credits, start, end } = await summarizePeriodUsage({
+  const { id, credits, start, end } = await summarizePeriodUsage({
     appId,
     target,
   });
 
   return {
+    id,
     appId,
     start: start.toISOString(),
     end: end.toISOString(),
