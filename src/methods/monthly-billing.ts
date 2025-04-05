@@ -5,11 +5,10 @@ import { PeriodBillingSchema } from '@libs/schemas';
 export const monthlyBilling = async (
   request: SummarizePeriodUsageRequest
 ): Promise<SummarizePeriodUsageResponse> => {
-  const { appId, start, end } = PeriodBillingSchema.parse(request);
-  const { credits } = await summarizePeriodUsage({
+  const { appId, target } = PeriodBillingSchema.parse(request);
+  const { credits, start, end } = await summarizePeriodUsage({
     appId,
-    start,
-    end,
+    target,
   });
 
   return {
