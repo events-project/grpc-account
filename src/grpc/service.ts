@@ -24,6 +24,29 @@ export interface ValidateApiKeyRequest {
   key: string;
 }
 
+export interface RevealApiKeyRequest {
+  accountId: string;
+  secretId: string;
+}
+
+export interface RevealApiKeyResponse {
+  apiKey: string;
+}
+
+export interface SummarizePeriodUsageRequest {
+  appId: string;
+  /** ISO string */
+  start: string;
+  end: string;
+}
+
+export interface SummarizePeriodUsageResponse {
+  appId: string;
+  start: string;
+  end: string;
+  credits: string;
+}
+
 function createBaseCreateAccountRequest(): CreateAccountRequest {
   return { id: "" };
 }
@@ -212,6 +235,330 @@ export const ValidateApiKeyRequest = {
   },
 };
 
+function createBaseRevealApiKeyRequest(): RevealApiKeyRequest {
+  return { accountId: "", secretId: "" };
+}
+
+export const RevealApiKeyRequest = {
+  encode(message: RevealApiKeyRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.accountId !== "") {
+      writer.uint32(10).string(message.accountId);
+    }
+    if (message.secretId !== "") {
+      writer.uint32(18).string(message.secretId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): RevealApiKeyRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRevealApiKeyRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.accountId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.secretId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RevealApiKeyRequest {
+    return {
+      accountId: isSet(object.accountId) ? globalThis.String(object.accountId) : "",
+      secretId: isSet(object.secretId) ? globalThis.String(object.secretId) : "",
+    };
+  },
+
+  toJSON(message: RevealApiKeyRequest): unknown {
+    const obj: any = {};
+    if (message.accountId !== "") {
+      obj.accountId = message.accountId;
+    }
+    if (message.secretId !== "") {
+      obj.secretId = message.secretId;
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<RevealApiKeyRequest>): RevealApiKeyRequest {
+    return RevealApiKeyRequest.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<RevealApiKeyRequest>): RevealApiKeyRequest {
+    const message = createBaseRevealApiKeyRequest();
+    message.accountId = object.accountId ?? "";
+    message.secretId = object.secretId ?? "";
+    return message;
+  },
+};
+
+function createBaseRevealApiKeyResponse(): RevealApiKeyResponse {
+  return { apiKey: "" };
+}
+
+export const RevealApiKeyResponse = {
+  encode(message: RevealApiKeyResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.apiKey !== "") {
+      writer.uint32(10).string(message.apiKey);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): RevealApiKeyResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRevealApiKeyResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.apiKey = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RevealApiKeyResponse {
+    return { apiKey: isSet(object.apiKey) ? globalThis.String(object.apiKey) : "" };
+  },
+
+  toJSON(message: RevealApiKeyResponse): unknown {
+    const obj: any = {};
+    if (message.apiKey !== "") {
+      obj.apiKey = message.apiKey;
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<RevealApiKeyResponse>): RevealApiKeyResponse {
+    return RevealApiKeyResponse.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<RevealApiKeyResponse>): RevealApiKeyResponse {
+    const message = createBaseRevealApiKeyResponse();
+    message.apiKey = object.apiKey ?? "";
+    return message;
+  },
+};
+
+function createBaseSummarizePeriodUsageRequest(): SummarizePeriodUsageRequest {
+  return { appId: "", start: "", end: "" };
+}
+
+export const SummarizePeriodUsageRequest = {
+  encode(message: SummarizePeriodUsageRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.appId !== "") {
+      writer.uint32(10).string(message.appId);
+    }
+    if (message.start !== "") {
+      writer.uint32(18).string(message.start);
+    }
+    if (message.end !== "") {
+      writer.uint32(26).string(message.end);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SummarizePeriodUsageRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSummarizePeriodUsageRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.appId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.start = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.end = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SummarizePeriodUsageRequest {
+    return {
+      appId: isSet(object.appId) ? globalThis.String(object.appId) : "",
+      start: isSet(object.start) ? globalThis.String(object.start) : "",
+      end: isSet(object.end) ? globalThis.String(object.end) : "",
+    };
+  },
+
+  toJSON(message: SummarizePeriodUsageRequest): unknown {
+    const obj: any = {};
+    if (message.appId !== "") {
+      obj.appId = message.appId;
+    }
+    if (message.start !== "") {
+      obj.start = message.start;
+    }
+    if (message.end !== "") {
+      obj.end = message.end;
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<SummarizePeriodUsageRequest>): SummarizePeriodUsageRequest {
+    return SummarizePeriodUsageRequest.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<SummarizePeriodUsageRequest>): SummarizePeriodUsageRequest {
+    const message = createBaseSummarizePeriodUsageRequest();
+    message.appId = object.appId ?? "";
+    message.start = object.start ?? "";
+    message.end = object.end ?? "";
+    return message;
+  },
+};
+
+function createBaseSummarizePeriodUsageResponse(): SummarizePeriodUsageResponse {
+  return { appId: "", start: "", end: "", credits: "" };
+}
+
+export const SummarizePeriodUsageResponse = {
+  encode(message: SummarizePeriodUsageResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.appId !== "") {
+      writer.uint32(10).string(message.appId);
+    }
+    if (message.start !== "") {
+      writer.uint32(18).string(message.start);
+    }
+    if (message.end !== "") {
+      writer.uint32(26).string(message.end);
+    }
+    if (message.credits !== "") {
+      writer.uint32(34).string(message.credits);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SummarizePeriodUsageResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSummarizePeriodUsageResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.appId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.start = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.end = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.credits = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SummarizePeriodUsageResponse {
+    return {
+      appId: isSet(object.appId) ? globalThis.String(object.appId) : "",
+      start: isSet(object.start) ? globalThis.String(object.start) : "",
+      end: isSet(object.end) ? globalThis.String(object.end) : "",
+      credits: isSet(object.credits) ? globalThis.String(object.credits) : "",
+    };
+  },
+
+  toJSON(message: SummarizePeriodUsageResponse): unknown {
+    const obj: any = {};
+    if (message.appId !== "") {
+      obj.appId = message.appId;
+    }
+    if (message.start !== "") {
+      obj.start = message.start;
+    }
+    if (message.end !== "") {
+      obj.end = message.end;
+    }
+    if (message.credits !== "") {
+      obj.credits = message.credits;
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<SummarizePeriodUsageResponse>): SummarizePeriodUsageResponse {
+    return SummarizePeriodUsageResponse.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<SummarizePeriodUsageResponse>): SummarizePeriodUsageResponse {
+    const message = createBaseSummarizePeriodUsageResponse();
+    message.appId = object.appId ?? "";
+    message.start = object.start ?? "";
+    message.end = object.end ?? "";
+    message.credits = object.credits ?? "";
+    return message;
+  },
+};
+
 export type AccountServiceDefinition = typeof AccountServiceDefinition;
 export const AccountServiceDefinition = {
   name: "AccountService",
@@ -233,17 +580,49 @@ export const AccountServiceDefinition = {
       responseStream: false,
       options: {},
     },
+    revealApiKey: {
+      name: "RevealApiKey",
+      requestType: RevealApiKeyRequest,
+      requestStream: false,
+      responseType: RevealApiKeyResponse,
+      responseStream: false,
+      options: {},
+    },
+    monthlyBilling: {
+      name: "MonthlyBilling",
+      requestType: SummarizePeriodUsageRequest,
+      requestStream: false,
+      responseType: SummarizePeriodUsageResponse,
+      responseStream: false,
+      options: {},
+    },
   },
 } as const;
 
 export interface AccountServiceImplementation<CallContextExt = {}> {
   createAccount(request: CreateAccountRequest, context: CallContext & CallContextExt): Promise<DeepPartial<Account>>;
   validateApiKey(request: ValidateApiKeyRequest, context: CallContext & CallContextExt): Promise<DeepPartial<Account>>;
+  revealApiKey(
+    request: RevealApiKeyRequest,
+    context: CallContext & CallContextExt,
+  ): Promise<DeepPartial<RevealApiKeyResponse>>;
+  monthlyBilling(
+    request: SummarizePeriodUsageRequest,
+    context: CallContext & CallContextExt,
+  ): Promise<DeepPartial<SummarizePeriodUsageResponse>>;
 }
 
 export interface AccountServiceClient<CallOptionsExt = {}> {
   createAccount(request: DeepPartial<CreateAccountRequest>, options?: CallOptions & CallOptionsExt): Promise<Account>;
   validateApiKey(request: DeepPartial<ValidateApiKeyRequest>, options?: CallOptions & CallOptionsExt): Promise<Account>;
+  revealApiKey(
+    request: DeepPartial<RevealApiKeyRequest>,
+    options?: CallOptions & CallOptionsExt,
+  ): Promise<RevealApiKeyResponse>;
+  monthlyBilling(
+    request: DeepPartial<SummarizePeriodUsageRequest>,
+    options?: CallOptions & CallOptionsExt,
+  ): Promise<SummarizePeriodUsageResponse>;
 }
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
