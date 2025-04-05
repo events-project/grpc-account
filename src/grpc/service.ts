@@ -47,6 +47,24 @@ export interface SummarizePeriodUsageResponse {
   credits: string;
 }
 
+export interface UpdateBillingRequest {
+  id: string;
+  paymentId: string;
+  /** must match enum: "PAID", "FAILED" */
+  paymentStatus: string;
+}
+
+export interface UpdateBillingResponse {
+  id: string;
+  appId: string;
+  start: string;
+  end: string;
+  credits: string;
+  paymentId: string;
+  paymentStatus: string;
+  updatedAt: string;
+}
+
 function createBaseCreateAccountRequest(): CreateAccountRequest {
   return { id: "" };
 }
@@ -559,6 +577,259 @@ export const SummarizePeriodUsageResponse = {
   },
 };
 
+function createBaseUpdateBillingRequest(): UpdateBillingRequest {
+  return { id: "", paymentId: "", paymentStatus: "" };
+}
+
+export const UpdateBillingRequest = {
+  encode(message: UpdateBillingRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.paymentId !== "") {
+      writer.uint32(18).string(message.paymentId);
+    }
+    if (message.paymentStatus !== "") {
+      writer.uint32(26).string(message.paymentStatus);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): UpdateBillingRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseUpdateBillingRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.paymentId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.paymentStatus = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): UpdateBillingRequest {
+    return {
+      id: isSet(object.id) ? globalThis.String(object.id) : "",
+      paymentId: isSet(object.paymentId) ? globalThis.String(object.paymentId) : "",
+      paymentStatus: isSet(object.paymentStatus) ? globalThis.String(object.paymentStatus) : "",
+    };
+  },
+
+  toJSON(message: UpdateBillingRequest): unknown {
+    const obj: any = {};
+    if (message.id !== "") {
+      obj.id = message.id;
+    }
+    if (message.paymentId !== "") {
+      obj.paymentId = message.paymentId;
+    }
+    if (message.paymentStatus !== "") {
+      obj.paymentStatus = message.paymentStatus;
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<UpdateBillingRequest>): UpdateBillingRequest {
+    return UpdateBillingRequest.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<UpdateBillingRequest>): UpdateBillingRequest {
+    const message = createBaseUpdateBillingRequest();
+    message.id = object.id ?? "";
+    message.paymentId = object.paymentId ?? "";
+    message.paymentStatus = object.paymentStatus ?? "";
+    return message;
+  },
+};
+
+function createBaseUpdateBillingResponse(): UpdateBillingResponse {
+  return { id: "", appId: "", start: "", end: "", credits: "", paymentId: "", paymentStatus: "", updatedAt: "" };
+}
+
+export const UpdateBillingResponse = {
+  encode(message: UpdateBillingResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.appId !== "") {
+      writer.uint32(18).string(message.appId);
+    }
+    if (message.start !== "") {
+      writer.uint32(26).string(message.start);
+    }
+    if (message.end !== "") {
+      writer.uint32(34).string(message.end);
+    }
+    if (message.credits !== "") {
+      writer.uint32(42).string(message.credits);
+    }
+    if (message.paymentId !== "") {
+      writer.uint32(50).string(message.paymentId);
+    }
+    if (message.paymentStatus !== "") {
+      writer.uint32(58).string(message.paymentStatus);
+    }
+    if (message.updatedAt !== "") {
+      writer.uint32(66).string(message.updatedAt);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): UpdateBillingResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseUpdateBillingResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.appId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.start = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.end = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.credits = reader.string();
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.paymentId = reader.string();
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.paymentStatus = reader.string();
+          continue;
+        case 8:
+          if (tag !== 66) {
+            break;
+          }
+
+          message.updatedAt = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): UpdateBillingResponse {
+    return {
+      id: isSet(object.id) ? globalThis.String(object.id) : "",
+      appId: isSet(object.appId) ? globalThis.String(object.appId) : "",
+      start: isSet(object.start) ? globalThis.String(object.start) : "",
+      end: isSet(object.end) ? globalThis.String(object.end) : "",
+      credits: isSet(object.credits) ? globalThis.String(object.credits) : "",
+      paymentId: isSet(object.paymentId) ? globalThis.String(object.paymentId) : "",
+      paymentStatus: isSet(object.paymentStatus) ? globalThis.String(object.paymentStatus) : "",
+      updatedAt: isSet(object.updatedAt) ? globalThis.String(object.updatedAt) : "",
+    };
+  },
+
+  toJSON(message: UpdateBillingResponse): unknown {
+    const obj: any = {};
+    if (message.id !== "") {
+      obj.id = message.id;
+    }
+    if (message.appId !== "") {
+      obj.appId = message.appId;
+    }
+    if (message.start !== "") {
+      obj.start = message.start;
+    }
+    if (message.end !== "") {
+      obj.end = message.end;
+    }
+    if (message.credits !== "") {
+      obj.credits = message.credits;
+    }
+    if (message.paymentId !== "") {
+      obj.paymentId = message.paymentId;
+    }
+    if (message.paymentStatus !== "") {
+      obj.paymentStatus = message.paymentStatus;
+    }
+    if (message.updatedAt !== "") {
+      obj.updatedAt = message.updatedAt;
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<UpdateBillingResponse>): UpdateBillingResponse {
+    return UpdateBillingResponse.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<UpdateBillingResponse>): UpdateBillingResponse {
+    const message = createBaseUpdateBillingResponse();
+    message.id = object.id ?? "";
+    message.appId = object.appId ?? "";
+    message.start = object.start ?? "";
+    message.end = object.end ?? "";
+    message.credits = object.credits ?? "";
+    message.paymentId = object.paymentId ?? "";
+    message.paymentStatus = object.paymentStatus ?? "";
+    message.updatedAt = object.updatedAt ?? "";
+    return message;
+  },
+};
+
 export type AccountServiceDefinition = typeof AccountServiceDefinition;
 export const AccountServiceDefinition = {
   name: "AccountService",
@@ -596,6 +867,14 @@ export const AccountServiceDefinition = {
       responseStream: false,
       options: {},
     },
+    updateBillingStatus: {
+      name: "UpdateBillingStatus",
+      requestType: UpdateBillingRequest,
+      requestStream: false,
+      responseType: UpdateBillingResponse,
+      responseStream: false,
+      options: {},
+    },
   },
 } as const;
 
@@ -610,6 +889,10 @@ export interface AccountServiceImplementation<CallContextExt = {}> {
     request: SummarizePeriodUsageRequest,
     context: CallContext & CallContextExt,
   ): Promise<DeepPartial<SummarizePeriodUsageResponse>>;
+  updateBillingStatus(
+    request: UpdateBillingRequest,
+    context: CallContext & CallContextExt,
+  ): Promise<DeepPartial<UpdateBillingResponse>>;
 }
 
 export interface AccountServiceClient<CallOptionsExt = {}> {
@@ -623,6 +906,10 @@ export interface AccountServiceClient<CallOptionsExt = {}> {
     request: DeepPartial<SummarizePeriodUsageRequest>,
     options?: CallOptions & CallOptionsExt,
   ): Promise<SummarizePeriodUsageResponse>;
+  updateBillingStatus(
+    request: DeepPartial<UpdateBillingRequest>,
+    options?: CallOptions & CallOptionsExt,
+  ): Promise<UpdateBillingResponse>;
 }
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
