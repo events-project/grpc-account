@@ -7,6 +7,7 @@ service AccountService {
   rpc ValidateApiKey(ValidateApiKeyRequest) returns (Account);
   rpc RevealApiKey(RevealApiKeyRequest) returns (RevealApiKeyResponse);
   rpc MonthlyBilling(SummarizePeriodUsageRequest) returns (SummarizePeriodUsageResponse);
+  rpc UpdateBillingStatus(UpdateBillingRequest) returns (UpdateBillingResponse);
 
 }
 
@@ -41,3 +42,19 @@ message SummarizePeriodUsageResponse {
   string credits = 5;
 }
 
+message UpdateBillingRequest {
+  string id = 1;
+  string paymentId = 2;
+  string paymentStatus = 3; // must match enum: "PAID", "FAILED"
+}
+
+message UpdateBillingResponse {
+  string id = 1;
+  string appId = 2;
+  string start = 3;
+  string end = 4;
+  string credits = 5;
+  string paymentId = 6;
+  string paymentStatus = 7;
+  string updatedAt = 8;
+}
