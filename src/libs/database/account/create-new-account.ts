@@ -29,7 +29,7 @@ export const createNewAccount = async (params: { id: string }): Promise<Account>
     });
     return result;
   } catch (error) {
-    console.error('❌ Failed to create new account:', error);
+    console.error('Failed to create new account:', error);
 
     throw new InternalError();
   }

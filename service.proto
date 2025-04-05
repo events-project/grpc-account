@@ -30,8 +30,7 @@ message RevealApiKeyResponse {
 
 message SummarizePeriodUsageRequest {
   string appId = 1;
-  string start = 2; // ISO string
-  string end = 3;
+  string target = 2; // ISO string
 }
 
 message SummarizePeriodUsageResponse {
