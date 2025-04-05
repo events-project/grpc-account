@@ -1,15 +1,16 @@
-import { Kafka } from 'kafkajs';
+import { Kafka, logLevel } from 'kafkajs';
 import { env } from '@libs/env';
 import { handleEvent } from '@libs/kafka/event-handler';
 import { logger } from '@events-project/common';
 
-export const startKafkaConsumer = async () => {
+export const startKafkaConsumer = async (): Promise<void> => {
   const serviceName = env('SERVICE_NAME');
   const topic = env('KAFKA_TOPIC');
 
   const kafka = new Kafka({
     clientId: env('KAFKA_CLIENT_ID'),
     brokers: env('KAFKA_URL').split(','),
+    logLevel: logLevel.ERROR,
   });
 
   const consumer = kafka.consumer({ groupId: env('KAFKA_GROUP_ID'), sessionTimeout: 30000 });
@@ -21,9 +22,11 @@ export const startKafkaConsumer = async () => {
   await consumer.run({
     eachMessage: async ({ message }) => {
       try {
+        console.log(message);
         const parsed = JSON.parse(message.value?.toString() || '{}');
         await handleEvent(parsed);
       } catch (error) {
+        console.log(error);
         logger.error('Kafka message error:', error);
       }
     },

@@ -1,50 +1,37 @@
+import { InternalError, logger } from '@events-project/common';
 import { db } from '@libs/database/db';
+import { PeriodBillingParams } from '@libs/schemas';
+import { PeriodCreditUsage } from '@prisma/client';
 
-export const summarizePeriodUsage = async (
-  appId: string,
-  start: Date,
-  end: Date
-) => {
-  const total = await db.creditUsage.aggregate({
-    where: {
-      appId,
-      createdAt: {
-        gte: start,
-        lt: end,
+export const summarizePeriodUsage = async ({
+  appId,
+  start,
+  end,
+}: PeriodBillingParams): Promise<PeriodCreditUsage> => {
+  try {
+    const total = await db.creditUsage.aggregate({
+      where: {
+        appId,
+        createdAt: {
+          gte: start,
+          lt: end,
+        },
       },
-    },
-    _sum: {
-      credits: true,
-    },
-  });
+      _sum: {
+        credits: true,
+      },
+    });
 
-  const credits = total._sum.credits ?? BigInt(0);
-
-  const result = await db.periodCreditUsage.upsert({
-    where: {
-      appId_start_end: {
+    return await db.periodCreditUsage.create({
+      data: {
         appId,
         start,
         end,
+        credits: total._sum.credits ?? 0,
       },
-    },
-    update: {
-      credits,
-      updatedAt: new Date(),
-    },
-    create: {
-      appId,
-      start,
-      end,
-      credits,
-    },
-  });
-
-  return {
-    appId,
-    start: result.start.toISOString(),
-    end: result.end.toISOString(),
-    credits: result.credits.toString(),
-    paymentStatus: result.paymentStatus,
-  };
+    });
+  } catch (error) {
+    logger.error('Failed to summarize period usage:', error);
+    throw new InternalError('SUMMARIZE_PERIOD_USAGE_ERROR');
+  }
 };

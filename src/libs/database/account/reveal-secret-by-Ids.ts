@@ -2,11 +2,12 @@ import { db } from '@libs/database/db';
 import { decrypt } from 'encrypt-tools';
 import { env } from '@libs/env';
 import { NotFoundError } from '@events-project/common';
+import { RevealApiKeyParams } from '@libs/schemas';
 
-export const revealSecretByIds = async (
-  accountId: string,
-  secretId: string
-): Promise<{ apiKey: string }> => {
+export const revealSecretByIds = async ({
+  accountId,
+  secretId,
+}: RevealApiKeyParams): Promise<{ apiKey: string }> => {
   const secretRecord = await db.secret.findFirst({
     where: {
       id: secretId,

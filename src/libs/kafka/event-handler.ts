@@ -1,29 +1,20 @@
 import { z } from 'zod';
-import { getCreditEventMap } from '@libs/env';
-import { UsageType } from '@prisma/client';
 import { saveCreditUsage } from '@libs/database/account/save-credit-usage';
+import { UsageType } from '@prisma/client';
 
-const usageTypeSchema = z.nativeEnum(UsageType);
-const eventSchema = z.object({
+const EventSchema = z.object({
   id: z.string().min(1),
   appId: z.string().min(1),
-  type: usageTypeSchema,
+  type: z.string().min(1),
 });
 
-export const handleEvent = async (event: any) => {
-  const validated = eventSchema.parse({
-    id: event.id,
-    appId: event.appId,
-    type: event.type.toUpperCase(),
+export const handleEvent = async (event: unknown): Promise<void> => {
+  const params = EventSchema.parse(event);
+  const creditValue = Math.floor(Math.random() * 100);
+  await saveCreditUsage({
+    id: params.id,
+    appId: params.appId,
+    type: UsageType.EVENT,
+    credits: BigInt(creditValue),
   });
-
-  const creditMap = getCreditEventMap();
-  const creditValue = creditMap[validated.type] || 0;
-
-  await saveCreditUsage(
-    validated.id,
-    validated.appId,
-    validated.type,
-    BigInt(creditValue)
-  );
 };
