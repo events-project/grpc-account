@@ -54,6 +54,10 @@ export const summarizePeriodUsage = async ({
       },
     });
   } catch (error) {
+    if (error instanceof InternalError) {
+      throw error;
+    }
+
     logger.error('Failed to summarize period usage:', error);
     throw new InternalError('SUMMARIZE_PERIOD_USAGE_ERROR');
   }
