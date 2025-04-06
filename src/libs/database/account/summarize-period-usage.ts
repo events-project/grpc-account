@@ -1,35 +1,33 @@
-import { InternalError, logger } from '@events-project/common';
+import { InternalError, logger, NotFoundError } from '@events-project/common';
 import { db } from '@libs/database/db';
 import { PeriodBillingParams } from '@libs/schemas';
 import { PeriodCreditUsage } from '@prisma/client';
+
+const getLastPaidDate = async (appId: string): Promise<Date> => {
+  try {
+    const lastSummary = await db.periodCreditUsage.findFirst({
+      where: { appId },
+      orderBy: { end: 'desc' },
+    });
+    if (lastSummary) return lastSummary.end;
+
+    const firstUsage = await db.creditUsage.findFirstOrThrow({
+      where: { appId },
+      orderBy: { createdAt: 'asc' },
+      select: { createdAt: true },
+    });
+    return firstUsage.createdAt;
+  } catch (error) {
+    throw new NotFoundError('APP_USAGE_NOT_FOUND');
+  }
+};
 
 export const summarizePeriodUsage = async ({
   appId,
   target,
 }: PeriodBillingParams): Promise<PeriodCreditUsage> => {
   try {
-    const lastSummary = await db.periodCreditUsage.findFirst({
-      where: { appId },
-      orderBy: { end: 'desc' },
-    });
-
-    let start = lastSummary?.end;
-
-    if (!start) {
-      const firstUsage = await db.creditUsage.findFirst({
-        where: { appId },
-        orderBy: { createdAt: 'asc' },
-        select: { createdAt: true },
-      });
-
-      start = firstUsage?.createdAt;
-
-      if (!start) {
-        logger.warn(`No usage data found for appId ${appId}`);
-        throw new InternalError('NO_USAGE_DATA_FOUND');
-      }
-    }
-
+    const start = await getLastPaidDate(appId);
     const total = await db.creditUsage.aggregate({
       where: {
         appId,
@@ -43,21 +41,15 @@ export const summarizePeriodUsage = async ({
       },
     });
 
-    const credits = total._sum.credits ?? BigInt(0);
-
     return await db.periodCreditUsage.create({
       data: {
         appId,
         start,
         end: target,
-        credits,
+        credits: total._sum.credits ?? BigInt(0),
       },
     });
   } catch (error) {
-    if (error instanceof InternalError) {
-      throw error;
-    }
-
     logger.error('Failed to summarize period usage:', error);
     throw new InternalError('SUMMARIZE_PERIOD_USAGE_ERROR');
   }

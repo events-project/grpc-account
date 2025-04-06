@@ -5,10 +5,8 @@ import { UpdateBillingSchema } from '@libs/schemas';
 export const updateBillingStatus = async (
   request: UpdateBillingRequest
 ): Promise<UpdateBillingResponse> => {
-  const validated = UpdateBillingSchema.parse(request);
-
-  const record = await updateBillingStatusById(validated);
-
+  const params = UpdateBillingSchema.parse(request);
+  const record = await updateBillingStatusById(params);
   return {
     id: record.id,
     appId: record.appId,
