@@ -1,13 +1,13 @@
 import { UpdateBillingRequest, UpdateBillingResponse } from '@grpc/service';
-import { updateBillingHandler } from '@libs/database/account/update-billing-status-by-Id';
+import { updateBillingStatusById } from '@libs/database/account/update-billing-status-by-Id';
 import { UpdateBillingSchema } from '@libs/schemas';
 
 export const updateBillingStatus = async (
   request: UpdateBillingRequest
 ): Promise<UpdateBillingResponse> => {
-  const { id, paymentId, paymentStatus } = UpdateBillingSchema.parse(request);
+  const validated = UpdateBillingSchema.parse(request);
 
-  const record = await updateBillingHandler(id, paymentId, paymentStatus);
+  const record = await updateBillingStatusById(validated);
 
   return {
     id: record.id,
