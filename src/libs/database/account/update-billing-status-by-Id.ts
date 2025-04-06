@@ -6,9 +6,8 @@ import { UpdateBillingParams } from '@libs/schemas/update-status'; // adjust the
 export const updateBillingStatusById = async (
   params: UpdateBillingParams
 ): Promise<PeriodCreditUsage> => {
-  const { id, paymentId, paymentStatus } = params;
-
   try {
+    const { id, paymentId, paymentStatus } = params;
     return await db.periodCreditUsage.update({
       where: { id },
       data: {
