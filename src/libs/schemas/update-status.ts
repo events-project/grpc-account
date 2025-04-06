@@ -6,3 +6,5 @@ export const UpdateBillingSchema = z.object({
   paymentId: z.string().min(1),
   paymentStatus: z.nativeEnum(PaymentStatus),
 });
+
+export type UpdateBillingParams = z.infer<typeof UpdateBillingSchema>;

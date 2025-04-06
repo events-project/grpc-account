@@ -8,36 +8,34 @@ export const summarizePeriodUsage = async ({
   target,
 }: PeriodBillingParams): Promise<PeriodCreditUsage> => {
   try {
-    const targetDate = new Date(target);
-
     const lastSummary = await db.periodCreditUsage.findFirst({
       where: { appId },
       orderBy: { end: 'desc' },
     });
 
-    const start =
-      lastSummary?.end ??
-      (
-        await db.creditUsage.findFirst({
-          where: { appId },
-          orderBy: { createdAt: 'asc' },
-          select: { createdAt: true },
-        })
-      )?.createdAt;
+    let start = lastSummary?.end;
 
     if (!start) {
-      logger.warn(`No usage data found for appId ${appId}`);
-      throw new InternalError('NO_USAGE_DATA_FOUND');
-    }
+      const firstUsage = await db.creditUsage.findFirst({
+        where: { appId },
+        orderBy: { createdAt: 'asc' },
+        select: { createdAt: true },
+      });
 
-    const end = targetDate;
+      start = firstUsage?.createdAt;
+
+      if (!start) {
+        logger.warn(`No usage data found for appId ${appId}`);
+        throw new InternalError('NO_USAGE_DATA_FOUND');
+      }
+    }
 
     const total = await db.creditUsage.aggregate({
       where: {
         appId,
         createdAt: {
           gte: start,
-          lt: end,
+          lt: target,
         },
       },
       _sum: {
@@ -51,7 +49,7 @@ export const summarizePeriodUsage = async ({
       data: {
         appId,
         start,
-        end,
+        end: target,
         credits,
       },
     });

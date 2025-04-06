@@ -1,4 +1,4 @@
-import { InternalError } from '@events-project/common';
+import { InternalError, logger } from '@events-project/common';
 import { db } from '@libs/database/db';
 import { Account } from '@prisma/client';
 import { hash } from 'encrypt-tools';
@@ -13,9 +13,12 @@ export const findAccountByKey = async (key: string): Promise<Account | null> => 
         account: true,
       },
     });
+
     if (!result) return null;
+
     return result.account;
   } catch (error) {
-    throw new InternalError();
+    logger.error('Failed to find account by API key:', error);
+    throw new InternalError('FIND_ACCOUNT_BY_KEY_ERROR');
   }
 };
