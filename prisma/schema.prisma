@@ -15,7 +15,7 @@ datasource db {
 
 model Account {
   id        String   @id
-  credits   BigInt   @default(0)
+  stripeId  String   //@unique after creating algo for it
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -29,13 +29,13 @@ model Secret {
   type      SecretType
   secret    String     @unique
   hash      String     @unique
-  accountId String
+  appId     String
   isActive  Boolean
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   expiresAt DateTime?
 
-  account Account @relation(fields: [accountId], references: [id])
+  account Account @relation(fields: [appId], references: [id])
 }
 
 model CreditUsage {
