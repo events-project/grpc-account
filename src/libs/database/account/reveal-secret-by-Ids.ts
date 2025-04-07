@@ -8,12 +8,12 @@ export const revealSecretByIds = async (
   params: RevealApiKeyParams
 ): Promise<{ apiKey: string }> => {
   try {
-    const { accountId, secretId } = params;
+    const { id, secretId } = params;
 
     const secretRecord = await db.secret.findFirst({
       where: {
         id: secretId,
-        accountId,
+        appId: id,
         isActive: true,
       },
     });

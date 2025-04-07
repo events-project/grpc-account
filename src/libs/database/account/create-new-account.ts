@@ -4,7 +4,7 @@ import { generateTypeId, InternalError, logger } from '@events-project/common';
 import { encrypt, hash, id } from 'encrypt-tools';
 import { Account } from '@prisma/client';
 
-export const createNewAccount = async (params: { id: string }): Promise<Account> => {
+export const createNewAccount = async (appId: string, stripeId: string): Promise<Account> => {
   try {
     const apiKey = id('sk', 42);
     const { iv, ciphertext } = encrypt({
@@ -12,9 +12,10 @@ export const createNewAccount = async (params: { id: string }): Promise<Account>
       secretKey: env('SECRET_ENCRYPT_KEY'),
     });
 
-    const result = await db.account.create({
+    return await db.account.create({
       data: {
-        id: params.id,
+        id: appId,
+        stripeId: stripeId,
         secret: {
           create: [
             {
@@ -28,9 +29,8 @@ export const createNewAccount = async (params: { id: string }): Promise<Account>
         },
       },
     });
-
-    return result;
   } catch (error) {
+    console.log(error);
     logger.error('Failed to create new account:', error);
     throw new InternalError('CREATE_ACCOUNT_ERROR');
   }

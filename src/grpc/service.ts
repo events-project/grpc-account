@@ -7,7 +7,6 @@
 /* eslint-disable */
 import { type CallContext, type CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
-import Long = require("long");
 
 export const protobufPackage = "account";
 
@@ -17,7 +16,7 @@ export interface CreateAccountRequest {
 
 export interface Account {
   id: string;
-  credits: string;
+  createdAt: string;
 }
 
 export interface ValidateApiKeyRequest {
@@ -63,6 +62,15 @@ export interface UpdateBillingResponse {
   paymentId: string;
   paymentStatus: string;
   updatedAt: string;
+}
+
+export interface GetAccountStripeRequest {
+  id: string;
+}
+
+export interface GetAccountStripeResponse {
+  id: string;
+  stripeId: string;
 }
 
 function createBaseCreateAccountRequest(): CreateAccountRequest {
@@ -123,7 +131,7 @@ export const CreateAccountRequest = {
 };
 
 function createBaseAccount(): Account {
-  return { id: "", credits: "0" };
+  return { id: "", createdAt: "" };
 }
 
 export const Account = {
@@ -131,8 +139,8 @@ export const Account = {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.credits !== "0") {
-      writer.uint32(16).int64(message.credits);
+    if (message.createdAt !== "") {
+      writer.uint32(18).string(message.createdAt);
     }
     return writer;
   },
@@ -152,11 +160,11 @@ export const Account = {
           message.id = reader.string();
           continue;
         case 2:
-          if (tag !== 16) {
+          if (tag !== 18) {
             break;
           }
 
-          message.credits = longToString(reader.int64() as Long);
+          message.createdAt = reader.string();
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -170,7 +178,7 @@ export const Account = {
   fromJSON(object: any): Account {
     return {
       id: isSet(object.id) ? globalThis.String(object.id) : "",
-      credits: isSet(object.credits) ? globalThis.String(object.credits) : "0",
+      createdAt: isSet(object.createdAt) ? globalThis.String(object.createdAt) : "",
     };
   },
 
@@ -179,8 +187,8 @@ export const Account = {
     if (message.id !== "") {
       obj.id = message.id;
     }
-    if (message.credits !== "0") {
-      obj.credits = message.credits;
+    if (message.createdAt !== "") {
+      obj.createdAt = message.createdAt;
     }
     return obj;
   },
@@ -191,7 +199,7 @@ export const Account = {
   fromPartial(object: DeepPartial<Account>): Account {
     const message = createBaseAccount();
     message.id = object.id ?? "";
-    message.credits = object.credits ?? "0";
+    message.createdAt = object.createdAt ?? "";
     return message;
   },
 };
@@ -830,6 +838,137 @@ export const UpdateBillingResponse = {
   },
 };
 
+function createBaseGetAccountStripeRequest(): GetAccountStripeRequest {
+  return { id: "" };
+}
+
+export const GetAccountStripeRequest = {
+  encode(message: GetAccountStripeRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetAccountStripeRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetAccountStripeRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GetAccountStripeRequest {
+    return { id: isSet(object.id) ? globalThis.String(object.id) : "" };
+  },
+
+  toJSON(message: GetAccountStripeRequest): unknown {
+    const obj: any = {};
+    if (message.id !== "") {
+      obj.id = message.id;
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<GetAccountStripeRequest>): GetAccountStripeRequest {
+    return GetAccountStripeRequest.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<GetAccountStripeRequest>): GetAccountStripeRequest {
+    const message = createBaseGetAccountStripeRequest();
+    message.id = object.id ?? "";
+    return message;
+  },
+};
+
+function createBaseGetAccountStripeResponse(): GetAccountStripeResponse {
+  return { id: "", stripeId: "" };
+}
+
+export const GetAccountStripeResponse = {
+  encode(message: GetAccountStripeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.stripeId !== "") {
+      writer.uint32(18).string(message.stripeId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetAccountStripeResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetAccountStripeResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.stripeId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GetAccountStripeResponse {
+    return {
+      id: isSet(object.id) ? globalThis.String(object.id) : "",
+      stripeId: isSet(object.stripeId) ? globalThis.String(object.stripeId) : "",
+    };
+  },
+
+  toJSON(message: GetAccountStripeResponse): unknown {
+    const obj: any = {};
+    if (message.id !== "") {
+      obj.id = message.id;
+    }
+    if (message.stripeId !== "") {
+      obj.stripeId = message.stripeId;
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<GetAccountStripeResponse>): GetAccountStripeResponse {
+    return GetAccountStripeResponse.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<GetAccountStripeResponse>): GetAccountStripeResponse {
+    const message = createBaseGetAccountStripeResponse();
+    message.id = object.id ?? "";
+    message.stripeId = object.stripeId ?? "";
+    return message;
+  },
+};
+
 export type AccountServiceDefinition = typeof AccountServiceDefinition;
 export const AccountServiceDefinition = {
   name: "AccountService",
@@ -875,6 +1014,14 @@ export const AccountServiceDefinition = {
       responseStream: false,
       options: {},
     },
+    getAccountStripe: {
+      name: "GetAccountStripe",
+      requestType: GetAccountStripeRequest,
+      requestStream: false,
+      responseType: GetAccountStripeResponse,
+      responseStream: false,
+      options: {},
+    },
   },
 } as const;
 
@@ -893,6 +1040,10 @@ export interface AccountServiceImplementation<CallContextExt = {}> {
     request: UpdateBillingRequest,
     context: CallContext & CallContextExt,
   ): Promise<DeepPartial<UpdateBillingResponse>>;
+  getAccountStripe(
+    request: GetAccountStripeRequest,
+    context: CallContext & CallContextExt,
+  ): Promise<DeepPartial<GetAccountStripeResponse>>;
 }
 
 export interface AccountServiceClient<CallOptionsExt = {}> {
@@ -910,6 +1061,10 @@ export interface AccountServiceClient<CallOptionsExt = {}> {
     request: DeepPartial<UpdateBillingRequest>,
     options?: CallOptions & CallOptionsExt,
   ): Promise<UpdateBillingResponse>;
+  getAccountStripe(
+    request: DeepPartial<GetAccountStripeRequest>,
+    options?: CallOptions & CallOptionsExt,
+  ): Promise<GetAccountStripeResponse>;
 }
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
@@ -919,15 +1074,6 @@ export type DeepPartial<T> = T extends Builtin ? T
   : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-function longToString(long: Long) {
-  return long.toString();
-}
-
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
