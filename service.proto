@@ -6,17 +6,18 @@ service AccountService {
   rpc CreateAccount(CreateAccountRequest) returns (Account);
   rpc ValidateApiKey(ValidateApiKeyRequest) returns (Account);
   rpc RevealApiKey(RevealApiKeyRequest) returns (RevealApiKeyResponse);
-  rpc MonthlyBilling(SummarizePeriodUsageRequest) returns (SummarizePeriodUsageResponse);
+  rpc MonthlyBilling(SummarizePeriodUsageRequest)
+      returns (SummarizePeriodUsageResponse);
   rpc UpdateBillingStatus(UpdateBillingRequest) returns (UpdateBillingResponse);
-  rpc GetAccountStripe(GetAccountStripeRequest) returns (GetAccountStripeResponse);
-
+  rpc GetAccount(GetAccountRequest) returns (Account);
 }
 
 message CreateAccountRequest { string id = 1; }
 
+message GetAccountRequest { string id = 1; }
 message Account {
   string id = 1;
-  string createdAt = 2;
+  string stripeId = 2;
 }
 
 message ValidateApiKeyRequest { string key = 1; }
@@ -26,9 +27,7 @@ message RevealApiKeyRequest {
   string secretId = 2;
 }
 
-message RevealApiKeyResponse {
-  string apiKey = 1;
-}
+message RevealApiKeyResponse { string apiKey = 1; }
 
 message SummarizePeriodUsageRequest {
   string appId = 1;
@@ -58,14 +57,4 @@ message UpdateBillingResponse {
   string paymentId = 6;
   string paymentStatus = 7;
   string updatedAt = 8;
-}
-
-message GetAccountStripeRequest{
-  string id = 1;
-}
-
-message GetAccountStripeResponse{
-  string id = 1;
-  string stripeId = 2;
-
 }
