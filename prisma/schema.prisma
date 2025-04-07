@@ -14,14 +14,14 @@ datasource db {
 }
 
 model Account {
-  id        String   @id
-  stripeId  String   //@unique after creating algo for it
+  id       String @id
+  stripeId String @unique
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  secret Secret[]
-
-  CreditUsage CreditUsage[]
+  secret      Secret[]
+  creditUsage CreditUsage[]
 }
 
 model Secret {

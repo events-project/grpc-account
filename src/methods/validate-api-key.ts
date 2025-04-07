@@ -7,6 +7,6 @@ export const validateApiKey = async (request: ValidateApiKeyRequest): Promise<Ac
   if (!result) throw new NotFoundError('ACCOUNT_NOT_FOUND');
   return {
     id: result.id,
-    createdAt: result.createdAt.toString(),
+    stripeId: result.stripeId,
   };
 };

@@ -1,13 +1,14 @@
+import { generateTypeId } from '@events-project/common';
 import { CreateAccountRequest, Account } from '@grpc/service';
 import { createNewAccount } from '@libs/database/account';
-import { AccountSchema } from '@libs/schemas';
+import { CreateAccountSchema } from '@libs/schemas';
 
 export const createAccount = async (request: CreateAccountRequest): Promise<Account> => {
-  const { id } = AccountSchema.parse(request);
-  const stripeId = ''; //TODO
-  const result = await createNewAccount(id, stripeId);
-  return {
-    id: result.id,
-    createdAt: result.createdAt.toString(),
-  };
+  const params = CreateAccountSchema.parse(request);
+
+  // TODO: Get From stripe
+  const stripeId = generateTypeId('stripe');
+  const result = await createNewAccount({ id: params.id, stripeId });
+
+  return result;
 };

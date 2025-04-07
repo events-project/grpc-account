@@ -13,7 +13,6 @@ async function startServer(): Promise<void> {
   try {
     const server = createServer().use(errorHandlingMiddleware);
     server.add(AccountServiceDefinition, methods);
-
     await db.$connect();
     startKafkaConsumer().then(() => {
       logger.debug('Kafka consumer started');
