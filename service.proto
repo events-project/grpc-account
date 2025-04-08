@@ -45,7 +45,7 @@ message SummarizePeriodUsageResponse {
 message UpdateBillingRequest {
   string id = 1;
   string paymentId = 2;
-  string paymentStatus = 3; // must match enum: "PAID", "FAILED"
+  PaymentStatus paymentStatus = 3;
 }
 
 message UpdateBillingResponse {

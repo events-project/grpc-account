@@ -98,8 +98,7 @@ export interface SummarizePeriodUsageResponse {
 export interface UpdateBillingRequest {
   id: string;
   paymentId: string;
-  /** must match enum: "PAID", "FAILED" */
-  paymentStatus: string;
+  paymentStatus: PaymentStatus;
 }
 
 export interface UpdateBillingResponse {
@@ -683,7 +682,7 @@ export const SummarizePeriodUsageResponse = {
 };
 
 function createBaseUpdateBillingRequest(): UpdateBillingRequest {
-  return { id: "", paymentId: "", paymentStatus: "" };
+  return { id: "", paymentId: "", paymentStatus: 0 };
 }
 
 export const UpdateBillingRequest = {
@@ -694,8 +693,8 @@ export const UpdateBillingRequest = {
     if (message.paymentId !== "") {
       writer.uint32(18).string(message.paymentId);
     }
-    if (message.paymentStatus !== "") {
-      writer.uint32(26).string(message.paymentStatus);
+    if (message.paymentStatus !== 0) {
+      writer.uint32(24).int32(message.paymentStatus);
     }
     return writer;
   },
@@ -722,11 +721,11 @@ export const UpdateBillingRequest = {
           message.paymentId = reader.string();
           continue;
         case 3:
-          if (tag !== 26) {
+          if (tag !== 24) {
             break;
           }
 
-          message.paymentStatus = reader.string();
+          message.paymentStatus = reader.int32() as any;
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -741,7 +740,7 @@ export const UpdateBillingRequest = {
     return {
       id: isSet(object.id) ? globalThis.String(object.id) : "",
       paymentId: isSet(object.paymentId) ? globalThis.String(object.paymentId) : "",
-      paymentStatus: isSet(object.paymentStatus) ? globalThis.String(object.paymentStatus) : "",
+      paymentStatus: isSet(object.paymentStatus) ? paymentStatusFromJSON(object.paymentStatus) : 0,
     };
   },
 
@@ -753,8 +752,8 @@ export const UpdateBillingRequest = {
     if (message.paymentId !== "") {
       obj.paymentId = message.paymentId;
     }
-    if (message.paymentStatus !== "") {
-      obj.paymentStatus = message.paymentStatus;
+    if (message.paymentStatus !== 0) {
+      obj.paymentStatus = paymentStatusToJSON(message.paymentStatus);
     }
     return obj;
   },
@@ -766,7 +765,7 @@ export const UpdateBillingRequest = {
     const message = createBaseUpdateBillingRequest();
     message.id = object.id ?? "";
     message.paymentId = object.paymentId ?? "";
-    message.paymentStatus = object.paymentStatus ?? "";
+    message.paymentStatus = object.paymentStatus ?? 0;
     return message;
   },
 };
