@@ -6,7 +6,13 @@ import { stripe } from '@libs/stripe';
 export const createAccount = async (request: CreateAccountRequest): Promise<Account> => {
   const params = CreateAccountSchema.parse(request);
 
-  const customer = await stripe.customers.create();
+  const customer = await stripe.customers.create({
+    name: params.id,
+    description: `Customer for ${params.id}`,
+    metadata: {
+      appId: params.id,
+    },
+  });
   const result = await createNewAccount({ id: params.id, stripeId: customer.id });
 
   return result;
