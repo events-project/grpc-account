@@ -112,6 +112,15 @@ export interface UpdateBillingResponse {
   updatedAt: string;
 }
 
+export interface GetSecretRequest {
+  appId: string;
+}
+
+export interface GetSecretResponse {
+  secretId: string;
+  appId: string;
+}
+
 function createBaseCreateAccountRequest(): CreateAccountRequest {
   return { id: "" };
 }
@@ -934,6 +943,137 @@ export const UpdateBillingResponse = {
   },
 };
 
+function createBaseGetSecretRequest(): GetSecretRequest {
+  return { appId: "" };
+}
+
+export const GetSecretRequest = {
+  encode(message: GetSecretRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.appId !== "") {
+      writer.uint32(10).string(message.appId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetSecretRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetSecretRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.appId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GetSecretRequest {
+    return { appId: isSet(object.appId) ? globalThis.String(object.appId) : "" };
+  },
+
+  toJSON(message: GetSecretRequest): unknown {
+    const obj: any = {};
+    if (message.appId !== "") {
+      obj.appId = message.appId;
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<GetSecretRequest>): GetSecretRequest {
+    return GetSecretRequest.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<GetSecretRequest>): GetSecretRequest {
+    const message = createBaseGetSecretRequest();
+    message.appId = object.appId ?? "";
+    return message;
+  },
+};
+
+function createBaseGetSecretResponse(): GetSecretResponse {
+  return { secretId: "", appId: "" };
+}
+
+export const GetSecretResponse = {
+  encode(message: GetSecretResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.secretId !== "") {
+      writer.uint32(10).string(message.secretId);
+    }
+    if (message.appId !== "") {
+      writer.uint32(42).string(message.appId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetSecretResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetSecretResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.secretId = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.appId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GetSecretResponse {
+    return {
+      secretId: isSet(object.secretId) ? globalThis.String(object.secretId) : "",
+      appId: isSet(object.appId) ? globalThis.String(object.appId) : "",
+    };
+  },
+
+  toJSON(message: GetSecretResponse): unknown {
+    const obj: any = {};
+    if (message.secretId !== "") {
+      obj.secretId = message.secretId;
+    }
+    if (message.appId !== "") {
+      obj.appId = message.appId;
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<GetSecretResponse>): GetSecretResponse {
+    return GetSecretResponse.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<GetSecretResponse>): GetSecretResponse {
+    const message = createBaseGetSecretResponse();
+    message.secretId = object.secretId ?? "";
+    message.appId = object.appId ?? "";
+    return message;
+  },
+};
+
 export type AccountServiceDefinition = typeof AccountServiceDefinition;
 export const AccountServiceDefinition = {
   name: "AccountService",
@@ -987,6 +1127,14 @@ export const AccountServiceDefinition = {
       responseStream: false,
       options: {},
     },
+    getSecret: {
+      name: "GetSecret",
+      requestType: GetSecretRequest,
+      requestStream: false,
+      responseType: GetSecretResponse,
+      responseStream: false,
+      options: {},
+    },
   },
 } as const;
 
@@ -1006,6 +1154,7 @@ export interface AccountServiceImplementation<CallContextExt = {}> {
     context: CallContext & CallContextExt,
   ): Promise<DeepPartial<UpdateBillingResponse>>;
   getAccount(request: GetAccountRequest, context: CallContext & CallContextExt): Promise<DeepPartial<Account>>;
+  getSecret(request: GetSecretRequest, context: CallContext & CallContextExt): Promise<DeepPartial<GetSecretResponse>>;
 }
 
 export interface AccountServiceClient<CallOptionsExt = {}> {
@@ -1024,6 +1173,7 @@ export interface AccountServiceClient<CallOptionsExt = {}> {
     options?: CallOptions & CallOptionsExt,
   ): Promise<UpdateBillingResponse>;
   getAccount(request: DeepPartial<GetAccountRequest>, options?: CallOptions & CallOptionsExt): Promise<Account>;
+  getSecret(request: DeepPartial<GetSecretRequest>, options?: CallOptions & CallOptionsExt): Promise<GetSecretResponse>;
 }
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
