@@ -3,6 +3,8 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const os = require('os');
+const isWindows = os.platform() === 'win32';
 
 // Get the service name from the directory name (e.g., grpc-account -> account)
 function getServiceName() {
@@ -254,7 +256,8 @@ async function generateClient() {
   try {
     // Ensure the proto file is compiled
     console.log('Generating TypeScript from proto file...');
-    execSync('npm run proto:generate', { stdio: 'inherit' });
+    const protoCommand = isWindows ? 'npm run proto:generatewin' : 'npm run proto:generate';
+    execSync(protoCommand, { stdio: 'inherit' });
 
     const serviceName = getServiceName();
     console.log(`Generating client for ${serviceName} service...`);
