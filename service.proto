@@ -10,6 +10,7 @@ service AccountService {
       returns (SummarizePeriodUsageResponse);
   rpc UpdateBillingStatus(UpdateBillingRequest) returns (UpdateBillingResponse);
   rpc GetAccount(GetAccountRequest) returns (Account);
+  rpc GetSecret(GetSecretRequest) returns (GetSecretResponse);
 }
 
 message CreateAccountRequest {string id = 1;}
@@ -57,6 +58,15 @@ message UpdateBillingResponse {
   string paymentId = 6;
   string paymentStatus = 7;
   string updatedAt = 8;
+}
+
+message GetSecretRequest {
+  string appId = 1;
+}
+
+message GetSecretResponse {
+  string secretId = 1;
+  string appId = 5;
 }
 
 enum PaymentStatus {

@@ -59,6 +59,9 @@ CREATE TABLE "PeriodCreditUsage" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Account_stripeId_key" ON "Account"("stripeId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Secret_secret_key" ON "Secret"("secret");
 
 -- CreateIndex

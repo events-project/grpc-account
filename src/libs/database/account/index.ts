@@ -5,3 +5,4 @@ export * from './summarize-period-usage';
 export * from './save-credit-usage';
 export * from './update-billing-status-by-Id';
 export * from './find-account-by-id';
+export * from './get-Secret-By-Id';
