@@ -2,7 +2,7 @@ import { db } from '@libs/database/db';
 import { InternalError, logger } from '@events-project/common';
 import { Secret } from '@prisma/client';
 
-export const getSecretById = async (params: { appId: string }): Promise<Secret> => {
+export const findSecretByAppId = async (params: { appId: string }): Promise<Secret> => {
   try {
     const result = await db.secret.findFirst({
       where: {

@@ -1,13 +1,13 @@
 import { GetSecretRequest, GetSecretResponse } from '@grpc/service';
-import { getSecretById } from '@libs/database/account';
+import { findSecretByAppId } from '@libs/database/secret';
+
 import { SecretSchema } from '@libs/schemas';
 
 export const getSecret = async (request: GetSecretRequest): Promise<GetSecretResponse> => {
-  const { appId } = SecretSchema.parse(request);
-
-  const result = await getSecretById({ appId });
+  const params = SecretSchema.parse(request);
+  const result = await findSecretByAppId(params);
   return {
-    appId: appId,
+    appId: result.appId,
     secretId: result.id,
   };
 };
