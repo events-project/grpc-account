@@ -1,4 +1,4 @@
-import { createServer } from 'nice-grpc';
+import { createServer, Server } from 'nice-grpc';
 import { startKafkaConsumer } from '@libs/kafka';
 
 import { AccountServiceDefinition } from '@grpc/service';
@@ -8,6 +8,24 @@ import { env } from '@libs/env';
 import { errorHandlingMiddleware, logger } from '@events-project/common';
 
 const address = `${env('HOST')}:${env('PORT')}`;
+
+process.on('unhandledRejection', (reason) => {
+  logger.error(reason, `Unhandled Rejection: ${reason}`);
+});
+
+process.on('uncaughtException', (error) => {
+  logger.error(error, `Uncaught Exception: ${error}`);
+});
+
+async function gracefulShutdown(server: Server): Promise<void> {
+  try {
+    await server.shutdown();
+    process.exit(0);
+  } catch (error) {
+    logger.error(error, `Error during server shutdown: ${error}`);
+    process.exit(1);
+  }
+}
 
 async function startServer(): Promise<void> {
   try {
@@ -21,10 +39,7 @@ async function startServer(): Promise<void> {
 
     const signals = ['SIGINT', 'SIGTERM'];
     signals.forEach((signal) => {
-      process.on(signal, async () => {
-        await server.shutdown();
-        process.exit(0);
-      });
+      process.once(signal, () => gracefulShutdown(server));
     });
   } catch (error) {
     logger.error('Failed to start server:', error);
