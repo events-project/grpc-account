@@ -22,7 +22,6 @@ export const startKafkaConsumer = async (): Promise<void> => {
   await consumer.run({
     eachMessage: async ({ message }) => {
       try {
-        console.log(message);
         const parsed = JSON.parse(message.value?.toString() || '{}');
         await handleEvent(parsed);
       } catch (error) {

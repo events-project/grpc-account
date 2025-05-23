@@ -20,6 +20,7 @@
     "client:publish": "bash scripts/publish-client.sh"
   },
   "dependencies": {
+    "@clickhouse/client": "^1.11.1",
     "@events-project/common": "^1.0.9",
     "@prisma/client": "^6.5.0",
     "date-fns": "^4.1.0",

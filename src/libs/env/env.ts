@@ -13,6 +13,9 @@ const envSchema = z.object({
   KAFKA_GROUP_ID: z.string(),
   SERVICE_NAME: z.string(),
   STRIPE_SECRET_KEY: z.string(),
+  CLICKHOUSE_URL: z.string(),
+  CLICKHOUSE_USERNAME: z.string(),
+  CLICKHOUSE_PASSWORD: z.string(),
 });
 type Env = z.infer<typeof envSchema>;
 const envValues = envSchema.parse(process.env);

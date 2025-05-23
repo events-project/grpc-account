@@ -1,19 +1,14 @@
 import { CreateAccountRequest, Account } from '@grpc/service';
 import { createNewAccount } from '@libs/database/account';
 import { CreateAccountSchema } from '@libs/schemas';
-import { stripe } from '@libs/stripe';
 
 export const createAccount = async (request: CreateAccountRequest): Promise<Account> => {
   const params = CreateAccountSchema.parse(request);
-
-  const customer = await stripe.customers.create({
-    name: params.id,
-    description: `Customer for ${params.id}`,
-    metadata: {
-      appId: params.id,
-    },
+  const result = await createNewAccount({
+    id: params.id,
+    name: params.name,
+    slug: params.slug,
   });
-  const result = await createNewAccount({ id: params.id, stripeId: customer.id });
 
   return result;
 };

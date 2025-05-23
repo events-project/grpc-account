@@ -57,6 +57,8 @@ export function paymentStatusToJSON(object: PaymentStatus): string {
 
 export interface CreateAccountRequest {
   id: string;
+  name: string;
+  slug?: string | undefined;
 }
 
 export interface GetAccountRequest {
@@ -122,13 +124,19 @@ export interface GetSecretResponse {
 }
 
 function createBaseCreateAccountRequest(): CreateAccountRequest {
-  return { id: "" };
+  return { id: "", name: "", slug: undefined };
 }
 
 export const CreateAccountRequest = {
   encode(message: CreateAccountRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.slug !== undefined) {
+      writer.uint32(26).string(message.slug);
     }
     return writer;
   },
@@ -147,6 +155,20 @@ export const CreateAccountRequest = {
 
           message.id = reader.string();
           continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.slug = reader.string();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -157,13 +179,23 @@ export const CreateAccountRequest = {
   },
 
   fromJSON(object: any): CreateAccountRequest {
-    return { id: isSet(object.id) ? globalThis.String(object.id) : "" };
+    return {
+      id: isSet(object.id) ? globalThis.String(object.id) : "",
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
+      slug: isSet(object.slug) ? globalThis.String(object.slug) : undefined,
+    };
   },
 
   toJSON(message: CreateAccountRequest): unknown {
     const obj: any = {};
     if (message.id !== "") {
       obj.id = message.id;
+    }
+    if (message.name !== "") {
+      obj.name = message.name;
+    }
+    if (message.slug !== undefined) {
+      obj.slug = message.slug;
     }
     return obj;
   },
@@ -174,6 +206,8 @@ export const CreateAccountRequest = {
   fromPartial(object: DeepPartial<CreateAccountRequest>): CreateAccountRequest {
     const message = createBaseCreateAccountRequest();
     message.id = object.id ?? "";
+    message.name = object.name ?? "";
+    message.slug = object.slug ?? undefined;
     return message;
   },
 };
